@@ -1,0 +1,19 @@
+.volumeControl {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  grid-template-rows: auto;
+  grid-template-areas: "display display display" "down mute up";
+
+  .display {
+    grid-area: display;
+  }
+  .downButton {
+    grid-area: down;
+  }
+  .muteButton {
+    grid-area: mute;
+  }
+  .upButton {
+    grid-area: up;
+  }
+}

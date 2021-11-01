@@ -1,0 +1,23 @@
+.error {
+  background-color: rgba(255,255,255,0.95);
+  margin: 10px;
+
+  .title {
+    padding: 8px;
+    font-size: 1.2rem;
+  }
+
+  .message {
+    padding: 8px;
+    font-size: 1rem;
+  }
+
+  .buttons {
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    button {
+      font-size: 1.2rem;
+    }
+  }
+}

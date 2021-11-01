@@ -1,0 +1,8 @@
+@import "./styles/colors";
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: $themeBackground;
+  color: $themeColor;
+}

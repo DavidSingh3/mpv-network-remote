@@ -1,0 +1,67 @@
+.seekBar {
+  background-color: #4A4A4A;
+  padding: 4px;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: auto;
+  grid-template-areas:
+          "playButton fullscreenButton stopButton clocks"
+          "slider slider slider slider";
+
+  .playButton {
+    grid-area: playButton;
+    width: 65px;
+    height: 65px;
+    border-radius: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+  }
+
+  .fullscreenButton {
+    grid-area: fullscreenButton;
+    width: 45px;
+    height: 45px;
+    border-radius: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+  }
+
+  .stopButton {
+    grid-area: stopButton;
+    width: 35px;
+    height: 35px;
+    border-radius: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+
+  .timers {
+    grid-area: clocks;
+    padding: 8px 20px;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+
+    .timePassedHumanReadable {
+      color: white;
+      font-size: 2rem;
+    }
+
+    .durationHumanReadable {
+      color: #A4A4A4;
+      font-size: 0.8rem;
+    }
+  }
+
+  .slider {
+    grid-area: slider;
+    height: 45px;
+  }
+}
