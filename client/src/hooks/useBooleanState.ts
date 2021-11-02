@@ -2,11 +2,16 @@ import { useState } from 'react'
 
 export default function useBooleanState (defaultValue: boolean): [
     boolean,
-    (newValue: boolean) => void,
-    () => void
+    (newValue?: boolean) => void,
 ] {
   const [value, setValue] = useState<boolean>(defaultValue)
-  const flipValue = () => setValue(!value)
+  const flipOrSetValue = (newValue?: boolean) => {
+    if (typeof newValue === 'boolean') {
+      setValue(newValue)
+    } else {
+      setValue(!value)
+    }
+  }
 
-  return [value, setValue, flipValue]
+  return [value, flipOrSetValue]
 }

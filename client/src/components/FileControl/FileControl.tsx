@@ -8,35 +8,35 @@ import IconButton from '../IconButton/IconButton'
 
 export default function FileControl () {
   const file = useMpvFile()
-  const [selectVideoFilePicker,, flipSelectVideoFilePicker] = useBooleanState(false)
-  const [selectSubtitlesFilePicker,, flipSelectSubtitlesFilePicker] = useBooleanState(false)
+  const [selectVideoFilePicker, flipOrSetSelectVideoFilePicker] = useBooleanState(false)
+  const [selectSubtitlesFilePicker, flipOrSetSelectSubtitlesFilePicker] = useBooleanState(false)
   return <div className={classes.fileControl}>
       <IconButton
           Icon={MdOndemandVideo}
           text="Select video file"
           className={classes.selectVideoButton}
-          onClick={flipSelectVideoFilePicker}
+          onClick={flipOrSetSelectVideoFilePicker}
       />
       {
           file && <IconButton
             Icon={MdTranslate}
             text="Select subtitles file"
             className={classes.selectSubtitlesButton}
-            onClick={flipSelectSubtitlesFilePicker}
+            onClick={flipOrSetSelectSubtitlesFilePicker}
           />
       }
       {
           selectVideoFilePicker && <FilePicker
             title='Select video file'
             pickFileCallback={selectVideo}
-            closeCallback={flipSelectVideoFilePicker}
+            closeCallback={flipOrSetSelectVideoFilePicker}
           />
       }
       {
           selectSubtitlesFilePicker && <FilePicker
             title='Select subtitles file'
             pickFileCallback={addSubtitles}
-            closeCallback={flipSelectSubtitlesFilePicker}
+            closeCallback={flipOrSetSelectSubtitlesFilePicker}
           />
       }
     </div>
