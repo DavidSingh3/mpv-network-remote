@@ -1,11 +1,11 @@
 import useFileSystem from '../../hooks/useFileSystem'
 import Error from '../Error/Error'
-import { MdClose, MdOutlineFolderOpen, MdOutlineFolder, MdDriveFolderUpload, MdOutlinePermMedia } from 'react-icons/md'
+import { MdOutlineFolderOpen, MdOutlineFolder, MdDriveFolderUpload, MdOutlinePermMedia } from 'react-icons/md'
 import classes from './FilePicker.module.scss'
 import Modal from '../Modal/Modal'
 
 function FilePicker (props: {
-    title: string | null,
+    title: string,
     pickFileCallback: (path: string) => Promise<void>,
     closeCallback: () => void,
 }) {
@@ -17,12 +17,8 @@ function FilePicker (props: {
         console.log('there is an error:', error.message)
       })
   }
-  return <Modal>
+  return <Modal closeCallback={props.closeCallback} title={props.title}>
         <div className={classes.filePicker}>
-            {props.title && <div className={classes.title}>{props.title}</div>}
-            <div className={classes.closeButtonContainer}>
-                <MdClose onClick={props.closeCallback}/>
-            </div>
             {fileSystem.loading && <div>loading</div>}
             {fileSystem.error && <Error message={fileSystem.error} hideErrorCallback={setPathToParentDirectory}/>}
             <div className={classes.entitiesContainer}>

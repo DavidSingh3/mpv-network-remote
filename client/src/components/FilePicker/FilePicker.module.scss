@@ -1,24 +1,7 @@
 .filePicker {
   position: relative;
-  display: grid;
-  grid-template-columns: auto auto;
-  grid-template-rows: auto 1fr;
-  grid-template-areas: "title close-button" "explorer explorer";
   margin: 8px;
   height: calc(100vh - 16px);
-
-  .title {
-    grid-area: title;
-    font-size: 1.5rem;
-    padding: 8px;
-  }
-
-  .closeButtonContainer {
-    grid-area: close-button;
-    text-align: right;
-    padding: 8px;
-    font-size: 1.5rem;
-  }
 
   .entitiesContainer {
     position: absolute;
@@ -26,7 +9,6 @@
     right: 0;
     top: 0;
     bottom: 20px;
-    grid-area: explorer;
     overflow: auto;
 
     .entities {

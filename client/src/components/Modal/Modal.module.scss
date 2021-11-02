@@ -6,6 +6,30 @@
   right: 0;
   bottom: 0;
   top: 0;
-
   background-color: $themeBackground;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-areas: "header" "body";
+
+  .header {
+    grid-area: header;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    .title {
+      font-size: 1.5rem;
+      padding: 8px;
+    }
+
+    .closeButtonContainer {
+      text-align: right;
+      padding: 8px;
+      font-size: 1.5rem;
+    }
+  }
+
+  .body {
+    grid-area: body;
+    overflow-y: auto;
+    position: relative;
+  }
 }
