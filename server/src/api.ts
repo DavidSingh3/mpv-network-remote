@@ -1,6 +1,6 @@
 import Express, { Request } from 'express'
 import getDirectoryEntities from './lib/getDirectoryEntities'
-import mpv, { mpvErrorHandler } from './lib/mpv'
+import MPVWrapper, { mpvErrorHandler, startMPV } from './lib/mpv'
 import os from 'os'
 import { SeekMode } from 'node-mpv'
 
@@ -19,8 +19,8 @@ router.get('/getDirectoryEntities', function (req: RequestWithQuery<{ path: stri
 })
 
 router.use(function (req, res, next) {
-  if (!mpv.isRunning()) {
-    mpv.start().then(next).catch((error) => {
+  if (!MPVWrapper.mpv.isRunning()) {
+    startMPV().then(next).catch((error) => {
       res.status(500).send(error.message)
     })
   } else {
@@ -31,9 +31,9 @@ router.use(function (req, res, next) {
 router.post('/selectVideo', function (req: RequestWithQuery<{ path: string }>, res) {
   mpvErrorHandler(async () => {
     const path = os.homedir().concat(req.query.path)
-    await mpv.load(path)
-    await mpv.fullscreen()
-    await mpv.play()
+    await MPVWrapper.mpv.load(path)
+    await MPVWrapper.mpv.fullscreen()
+    await MPVWrapper.mpv.play()
   })
     .then(() => {
       res.status(200).send()
@@ -45,7 +45,7 @@ router.post('/selectVideo', function (req: RequestWithQuery<{ path: string }>, r
 
 router.post('/addSubtitles', function (req: RequestWithQuery<{ path: string }>, res) {
   mpvErrorHandler(async () => {
-    await mpv.addSubtitles(os.homedir().concat(req.query.path))
+    await MPVWrapper.mpv.addSubtitles(os.homedir().concat(req.query.path))
   })
     .then(() => {
       res.status(200).send()
@@ -57,7 +57,7 @@ router.post('/addSubtitles', function (req: RequestWithQuery<{ path: string }>, 
 
 router.post('/togglePause', function (req, res) {
   mpvErrorHandler(async () => {
-    await mpv.togglePause()
+    await MPVWrapper.mpv.togglePause()
   })
     .then(() => {
       res.status(200).send()
@@ -69,7 +69,7 @@ router.post('/togglePause', function (req, res) {
 
 router.post('/toggleFullscreen', function (req, res) {
   mpvErrorHandler(async () => {
-    await mpv.toggleFullscreen()
+    await MPVWrapper.mpv.toggleFullscreen()
   })
     .then(() => {
       res.status(200).send()
@@ -81,7 +81,7 @@ router.post('/toggleFullscreen', function (req, res) {
 
 router.post('/toggleMute', function (req, res) {
   mpvErrorHandler(async () => {
-    await mpv.mute()
+    await MPVWrapper.mpv.mute()
   })
     .then(() => {
       res.status(200).send()
@@ -93,8 +93,8 @@ router.post('/toggleMute', function (req, res) {
 
 router.post('/adjustVolume', function (req: RequestWithQuery<{ adjustment: number }>, res) {
   mpvErrorHandler(async () => {
-    await mpv.adjustVolume(req.query.adjustment)
-    await mpv.mute(false)
+    await MPVWrapper.mpv.adjustVolume(req.query.adjustment)
+    await MPVWrapper.mpv.mute(false)
   })
     .then(() => {
       res.status(200).send()
@@ -106,7 +106,7 @@ router.post('/adjustVolume', function (req: RequestWithQuery<{ adjustment: numbe
 
 router.post('/seek', function (req: RequestWithQuery<{ timePosition: number, mode?: SeekMode | undefined }>, res) {
   mpvErrorHandler(async () => {
-    await mpv.seek(req.query.timePosition, req.query.mode)
+    await MPVWrapper.mpv.seek(req.query.timePosition, req.query.mode)
   })
     .then(() => {
       res.status(200).send()
@@ -118,7 +118,7 @@ router.post('/seek', function (req: RequestWithQuery<{ timePosition: number, mod
 
 router.post('/stop', function (req, res) {
   mpvErrorHandler(async () => {
-    await mpv.stop()
+    await MPVWrapper.mpv.stop()
   })
     .then(() => {
       res.status(200).send()

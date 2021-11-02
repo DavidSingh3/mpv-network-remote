@@ -1,6 +1,24 @@
 import MPV from 'node-mpv'
 
-export default new MPV({ debug: false })
+const MPVWrapper = {
+  mpv: initMPV()
+}
+
+export default MPVWrapper
+
+export async function startMPV (mpvInstance = MPVWrapper.mpv): Promise<void> {
+  return await mpvInstance.start()
+}
+
+function initMPV (): MPV {
+  const mpv = new MPV({ debug: false, verbose: false })
+  mpv.on('quit', () => {
+    console.info('restarting the MPV instance...')
+    MPVWrapper.mpv = initMPV()
+  })
+  startMPV(mpv).then(() => console.info('Started MPV')).catch(console.error)
+  return mpv
+}
 
 interface MPVError {
   errcode: number

@@ -1,5 +1,5 @@
 import { Server } from 'socket.io'
-import mpv from './mpv'
+import MPVWrapper, { startMPV } from './mpv'
 import http from 'http'
 
 export default function createInformationSocket (server: http.Server): void {
@@ -13,8 +13,8 @@ export default function createInformationSocket (server: http.Server): void {
     }
     new Promise<void>((resolve, reject) => {
       try {
-        if (!mpv.isRunning()) {
-          mpv.start().then(resolve).catch(console.error)
+        if (!MPVWrapper.mpv.isRunning()) {
+          startMPV().then(resolve).catch(console.error)
         } else {
           resolve()
         }
@@ -25,10 +25,10 @@ export default function createInformationSocket (server: http.Server): void {
       .then(() => {
         socket.on('ready', () => {
           console.log('a user is ready')
-          mpv.on('timeposition', (timeposition) => {
+          MPVWrapper.mpv.on('timeposition', (timeposition) => {
             emitPropertyChange('timeposition', timeposition)
           })
-          mpv.on('status', ({
+          MPVWrapper.mpv.on('status', ({
             property,
             value
           }) => {
@@ -48,19 +48,19 @@ export default function createInformationSocket (server: http.Server): void {
           ]
 
           properties.forEach((property) => {
-            mpv.getProperty(property).then((value) => {
+            MPVWrapper.mpv.getProperty(property).then((value) => {
               // console.log('should send', property, value)
               emitPropertyChange(property, value)
             }).catch(() => {
               emitPropertyChange(property, null)
             })
           })
-          mpv.getTimePosition()
+          MPVWrapper.mpv.getTimePosition()
             .then((value) => emitPropertyChange('timeposition', value))
             .catch(() => {
               emitPropertyChange('timeposition', 0)
             })
-          mpv.isPaused()
+          MPVWrapper.mpv.isPaused()
             .then((value) => emitPropertyChange('pause', value))
             .catch(console.error)
         })
