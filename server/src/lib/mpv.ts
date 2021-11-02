@@ -7,7 +7,7 @@ const MPVWrapper = {
 export default MPVWrapper
 
 export async function startMPV (mpvInstance = MPVWrapper.mpv): Promise<void> {
-  return await mpvInstance.start()
+  return await mpvInstance.start(['--ytdl', '--script-opts=ytdl_hook-ytdl_path=yt-dlp'])
 }
 
 function initMPV (): MPV {

@@ -28,10 +28,14 @@ router.use(function (req, res, next) {
   }
 })
 
-router.post('/selectVideo', function (req: RequestWithQuery<{ path: string }>, res) {
+router.post('/selectVideo', function (req: RequestWithQuery<{ path: string, url: undefined }>|RequestWithQuery<{ url: string, path: undefined }>, res) {
   mpvErrorHandler(async () => {
-    const path = os.homedir().concat(req.query.path)
-    await MPVWrapper.mpv.load(path)
+    if (typeof req.query.path === 'string') {
+      await MPVWrapper.mpv.load(os.homedir().concat(req.query.path))
+    }
+    if (typeof req.query.url === 'string') {
+      await MPVWrapper.mpv.load(req.query.url.replace(/^https:\/\//, 'http://'))
+    }
     await MPVWrapper.mpv.fullscreen()
     await MPVWrapper.mpv.play()
   })
