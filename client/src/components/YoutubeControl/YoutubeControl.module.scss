@@ -1,0 +1,48 @@
+.youtubeControl {
+  display: grid;
+
+  .modalBody {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 50px;
+    right: 0;
+
+    .results {
+      overflow-y: auto;
+      max-height: 100%;
+
+      .result {
+        margin: 32px 4px;
+        display: grid;
+        grid-gap: 4px;
+        grid-template-columns: auto 1fr;
+        grid-template-areas:
+              "thumb title"
+              "thumb channelTitle"
+              "description description";
+
+        .thumb {
+          grid-area: thumb;
+        }
+
+        .title {
+          grid-area: title;
+          font-weight: bold;
+        }
+
+        .channelTitle {
+          grid-area: channelTitle;
+          font-weight: lighter;
+          font-size: .8rem;
+
+        }
+
+        .description {
+          grid-area: description;
+        }
+
+      }
+    }
+  }
+}

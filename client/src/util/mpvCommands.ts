@@ -18,6 +18,10 @@ export function selectVideo (path: string) {
   return action('selectVideo', { path })
 }
 
+export function selectURL (url: string) {
+  return action('selectVideo', { url })
+}
+
 export function addSubtitles (path: string) {
   return action('addSubtitles', { path })
 }
