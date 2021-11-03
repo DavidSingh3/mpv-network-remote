@@ -17,6 +17,12 @@ export default async function (requestedSubDirectoryPath: string, mimeTypeRegex?
         } else {
           const { files, directories } = dirent.reduce(
             function (accumulator: DirectoryEntities, dirent) {
+              const direntPath = path.join(requestedFullPath, dirent.name)
+              try {
+                fs.accessSync(direntPath, fs.constants.R_OK)
+              } catch (e) {
+                return accumulator
+              }
               if (dirent.isFile()) {
                 const mimeType = mime.lookup(direntPath)
                 if (mimeTypeRegex?.test(mimeType) ?? true) {
