@@ -4,7 +4,7 @@ import useMpvInformation from '../../hooks/useMpvInformation'
 import { MdPlayArrow, MdPause, MdStop, MdCloseFullscreen, MdFullscreen } from 'react-icons/md'
 import classes from './SeekBar.module.scss'
 import { setTimePosition, togglePause, stop, toggleFullscreen } from '../../util/mpvCommands'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
 import useSocketIO from '../../hooks/useSocketIO'
 import useDelay from '../../hooks/useDelay'
 
@@ -24,6 +24,7 @@ export default function SeekBar (props: {file: MPVFile}) {
   const socket = useSocketIO()
   const [controllerTimePosition, delayedControllerTimePosition, setControllerTimePosition] = useDelay<number>(props.file.timePosition)
   const [displayTimePosition, setDisplayTimePosition] = useState(props.file.timePosition)
+  const isFirstRender = useRef(true)
 
   function handleChangeSlider (event: ChangeEvent<HTMLInputElement>) {
     setControllerTimePosition(parseInt(event.target.value ?? 0, 10))
@@ -38,6 +39,10 @@ export default function SeekBar (props: {file: MPVFile}) {
   }, [controllerTimePosition, delayedControllerTimePosition, props.file.timePosition])
 
   useEffect(function () {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
     setTimePosition(delayedControllerTimePosition).then(() => {
       socket.emit('mpv-property-change-request')
     })
