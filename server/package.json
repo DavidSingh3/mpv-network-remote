@@ -4,15 +4,17 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "preserve": "eslint . --ext .ts && tsc",
-    "serve": "node .",
-    "start": "nodemon -e ts --watch src --exec \"npm run serve\""
+    "build": "eslint . --ext .ts && tsc",
+    "serve": "node -r dotenv/config .",
+    "build-and-serve": "npm run build && npm run serve",
+    "start": "nodemon -e ts --watch src --exec \"npm run build-and-serve\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "node-mpv": "github:DavidSingh3/Node-MPV#fix-type-definitions",
     "socket.io": "^4.3.1"

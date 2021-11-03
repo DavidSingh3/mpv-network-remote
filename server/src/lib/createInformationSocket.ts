@@ -6,7 +6,7 @@ export default function createInformationSocket (server: http.Server): void {
   const io = new Server(server, { cors: {} })
 
   io.on('connection', (socket) => {
-    console.log('a user connected')
+    console.info('a user connected')
 
     function emitPropertyChange (property: string, value: string|boolean|number|null): void {
       socket.emit('mpv-property-change', property, value)
@@ -24,7 +24,7 @@ export default function createInformationSocket (server: http.Server): void {
     })
       .then(() => {
         socket.on('ready', () => {
-          console.log('a user is ready')
+          console.info('a user is ready')
           MPVWrapper.mpv.on('timeposition', (timeposition) => {
             emitPropertyChange('timeposition', timeposition)
           })
@@ -49,7 +49,6 @@ export default function createInformationSocket (server: http.Server): void {
 
           properties.forEach((property) => {
             MPVWrapper.mpv.getProperty(property).then((value) => {
-              // console.log('should send', property, value)
               emitPropertyChange(property, value)
             }).catch(() => {
               emitPropertyChange(property, null)

@@ -1,12 +1,14 @@
 import fs from 'fs'
-import os from 'os'
+import path from 'path'
+import { appendToPublicBaseDir } from './publicBaseDir'
 
 interface DirectoryEntities {files: string[], directories: string[]}
 
-export default async function (path: string): Promise<DirectoryEntities> {
+export default async function (requestedSubDirectoryPath: string): Promise<DirectoryEntities> {
   return await new Promise((resolve, reject) => {
+    const requestedFullPath = appendToPublicBaseDir(requestedSubDirectoryPath)
     fs.readdir(
-      os.homedir().concat(path),
+      requestedFullPath,
       { withFileTypes: true },
       (error, dirent) => {
         if (error !== null) {

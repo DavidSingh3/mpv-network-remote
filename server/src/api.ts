@@ -3,6 +3,7 @@ import getDirectoryEntities from './lib/getDirectoryEntities'
 import MPVWrapper, { mpvErrorHandler, startMPV } from './lib/mpv'
 import os from 'os'
 import { SeekMode } from 'node-mpv'
+import { appendToPublicBaseDir } from './lib/publicBaseDir'
 
 const router = Express.Router()
 
@@ -31,7 +32,7 @@ router.use(function (req, res, next) {
 router.post('/selectVideo', function (req: RequestWithQuery<{ path: string, url: undefined }>|RequestWithQuery<{ url: string, path: undefined }>, res) {
   mpvErrorHandler(async () => {
     if (typeof req.query.path === 'string') {
-      await MPVWrapper.mpv.load(os.homedir().concat(req.query.path))
+      await MPVWrapper.mpv.load(appendToPublicBaseDir(req.query.path))
     }
     if (typeof req.query.url === 'string') {
       await MPVWrapper.mpv.load(req.query.url.replace(/^https:\/\//, 'http://'))
