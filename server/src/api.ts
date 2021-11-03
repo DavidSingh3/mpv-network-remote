@@ -9,8 +9,9 @@ const router = Express.Router()
 
 type RequestWithQuery<query> = Request<{}, {}, null, query>
 
-router.get('/getDirectoryEntities', function (req: RequestWithQuery<{ path: string }>, res) {
-  getDirectoryEntities(req.query.path)
+router.get('/getDirectoryEntities', function (req: RequestWithQuery<{ path: string, mimeTypeRegex?: string }>, res) {
+  const mimeTypeRegex = req.query.mimeTypeRegex !== undefined ? new RegExp(req.query.mimeTypeRegex) : undefined
+  getDirectoryEntities(req.query.path, mimeTypeRegex)
     .then((directoryEntities) => {
       res.status(200).send(directoryEntities)
     })

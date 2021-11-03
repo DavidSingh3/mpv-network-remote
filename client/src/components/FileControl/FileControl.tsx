@@ -30,6 +30,7 @@ export default function FileControl () {
             title='Select video file'
             pickFileCallback={selectVideo}
             closeCallback={flipOrSetSelectVideoFilePicker}
+            mimeTypeRegex={/^video\/.*$/}
           />
       }
       {

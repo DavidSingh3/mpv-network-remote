@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { getDirectoryEntities } from '../util/getDirectoryEntities'
 
-export default function useFileSystem (): [
+export default function useFileSystem (mimeTypeRegex?: RegExp): [
     {
         path: string,
         loading: boolean,
@@ -16,7 +16,7 @@ export default function useFileSystem (): [
         setPathToParentDirectory: () => void,
     }
     ] {
-  const [path, setPath] = useState<string>('/Movies')
+  const [path, setPath] = useState<string>('/')
   const [loading, setLoading] = useState<boolean>(false)
   const [success, setSuccess] = useState<boolean>(false)
   const [error, setError] = useState<string|null>(null)
@@ -25,7 +25,7 @@ export default function useFileSystem (): [
 
   useEffect(() => {
     setLoading(true)
-    getDirectoryEntities(path)
+    getDirectoryEntities(path, mimeTypeRegex)
       .then(({ files, directories }) => {
         setSuccess(true)
         setError(null)
@@ -33,13 +33,12 @@ export default function useFileSystem (): [
         setDirectories(directories ?? [])
       })
       .catch((error) => {
-        console.log('david', error)
         setError(error.message)
       })
       .finally(() => {
         setLoading(false)
       })
-  }, [path])
+  }, [mimeTypeRegex, path])
 
   function setPathToParentDirectory () {
     if (path !== '/') {

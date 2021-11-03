@@ -8,8 +8,9 @@ function FilePicker (props: {
     title: string,
     pickFileCallback: (path: string) => Promise<void>,
     closeCallback: () => void,
+    mimeTypeRegex?: RegExp
 }) {
-  const [fileSystem, { setPathToParentDirectory, setPathToSubDirectory }] = useFileSystem()
+  const [fileSystem, { setPathToParentDirectory, setPathToSubDirectory }] = useFileSystem(props.mimeTypeRegex)
   const handleSelectFile = (name: string) => () => {
     props.pickFileCallback(fileSystem.path.concat(name))
       .then(props.closeCallback)

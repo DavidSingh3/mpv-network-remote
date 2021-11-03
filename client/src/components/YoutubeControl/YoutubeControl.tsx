@@ -19,8 +19,6 @@ export default function YoutubeControl () {
       key: process.env.REACT_APP_YOUTUBE_API_KEY
     }
 
-    console.log(process.env)
-
     if (search.length) {
       youtubeSearch(search, opts)
         .then(({ pageInfo, results }) => {

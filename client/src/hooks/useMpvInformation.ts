@@ -24,7 +24,6 @@ export default function useMpvInformation (): {
           setMute(value)
           break
         case 'pause':
-          console.log('should set paused', value)
           setPause(value)
           break
         case 'fullscreen':

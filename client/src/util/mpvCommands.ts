@@ -27,7 +27,6 @@ export function addSubtitles (path: string) {
 }
 
 export function togglePause () {
-  console.log('pausing')
   return action('togglePause')
 }
 
