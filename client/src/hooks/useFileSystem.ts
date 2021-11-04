@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { getDirectoryEntities } from '../util/getDirectoryEntities'
+import { TasksContext } from '../components/TaskManager/TaskManager'
 
 export default function useFileSystem (mimeTypeRegex?: RegExp): [
     {
         path: string,
-        loading: boolean,
         success: boolean,
         error: string|null,
         files: Array<string>,
@@ -17,14 +17,14 @@ export default function useFileSystem (mimeTypeRegex?: RegExp): [
     }
     ] {
   const [path, setPath] = useState<string>('/')
-  const [loading, setLoading] = useState<boolean>(false)
   const [success, setSuccess] = useState<boolean>(false)
   const [error, setError] = useState<string|null>(null)
   const [files, setFiles] = useState<Array<string>>([])
   const [directories, setDirectories] = useState<Array<string>>([])
+  const { addTask } = useContext(TasksContext)
 
   useEffect(() => {
-    setLoading(true)
+    const task = addTask(`Loading ${path} ...`)
     getDirectoryEntities(path, mimeTypeRegex)
       .then(({ files, directories }) => {
         setSuccess(true)
@@ -36,9 +36,9 @@ export default function useFileSystem (mimeTypeRegex?: RegExp): [
         setError(error.message)
       })
       .finally(() => {
-        setLoading(false)
+        task.finish()
       })
-  }, [mimeTypeRegex, path])
+  }, [addTask, mimeTypeRegex, path])
 
   function setPathToParentDirectory () {
     if (path !== '/') {
@@ -51,7 +51,7 @@ export default function useFileSystem (mimeTypeRegex?: RegExp): [
   }
 
   return [
-    { path, loading, success, error, files, directories },
+    { path, success, error, files, directories },
     { setPath, setPathToSubDirectory, setPathToParentDirectory }
   ]
 }

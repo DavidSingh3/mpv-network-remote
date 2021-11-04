@@ -1,0 +1,49 @@
+@import "../../styles/colors";
+
+.spinner {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 99999999;
+  background-color: rgba(255,255,255,0.1);
+  backdrop-filter: blur(3px);
+  color: $themeBackground;
+  font-size: 10rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .icon {
+    path {
+      filter: drop-shadow( 0 0 .1px rgba(255, 255, 255, 1));
+    }
+    animation-name: pulse;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+
+    @keyframes pulse {
+      0% {
+        transform: rotate(0);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  }
+
+  .tasksList {
+    margin-top: 40px;
+    font-size: 1rem;
+    color: white;
+
+    > div {
+      margin: 4px;
+      padding: 10px;
+      background-Color: #4A4A4A;
+    }
+  }
+}

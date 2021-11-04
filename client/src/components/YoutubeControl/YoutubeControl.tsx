@@ -4,14 +4,16 @@ import IconButton from '../IconButton/IconButton'
 import useBooleanState from '../../hooks/useBooleanState'
 import Modal from '../Modal/Modal'
 import DelaySearchField from '../DelaySearchField/DelaySearchField'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import youtubeSearch, { YouTubeSearchResults } from 'youtube-search'
 import { selectURL } from '../../util/mpvCommands'
+import { TasksContext } from '../TaskManager/TaskManager'
 
 export default function YoutubeControl () {
   const [showModal, flipOrSetShowModal] = useBooleanState(false)
   const [search, setSearch] = useState('')
   const [searchResults, setSearchResults] = useState<YouTubeSearchResults[]>([])
+  const { addTask } = useContext(TasksContext)
 
   useEffect(() => {
     const opts: youtubeSearch.YouTubeSearchOptions = {
@@ -32,7 +34,8 @@ export default function YoutubeControl () {
 
   function handleClickVideo (url: string) {
     return () => {
-      selectURL(url)
+      const task = addTask('Opening YouTube video ...')
+      selectURL(url).catch(console.error).finally(task.finish)
       flipOrSetShowModal()
     }
   }

@@ -3,16 +3,19 @@ import MediaControls from '../MediaControls/MediaControls'
 import useMpvInformation from '../../hooks/useMpvInformation'
 import FileControl from '../FileControl/FileControl'
 import YoutubeControl from '../YoutubeControl/YoutubeControl'
+import TaskManager from '../TaskManager/TaskManager'
 
 function App () {
   const { file } = useMpvInformation()
 
   return (
-        <main className={classes.app}>
-            {file && <MediaControls file={file}/>}
-            <FileControl/>
-            <YoutubeControl/>
-        </main>
+        <TaskManager>
+            <main className={classes.app}>
+                {file && <MediaControls file={file}/>}
+                <FileControl/>
+                <YoutubeControl/>
+            </main>
+        </TaskManager>
   )
 }
 
