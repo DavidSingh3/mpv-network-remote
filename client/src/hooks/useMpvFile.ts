@@ -35,25 +35,32 @@ export default function useMpvFile (): MPVFile|null {
   }, [path, filename, mediaTitle, duration, timePosition])
 
   useEffect(() => {
+    let isMounted = true
     socket.on('mpv-property-change', (property, value) => {
-      switch (property) {
-        case 'path':
-          setPath(value)
-          break
-        case 'filename':
-          setFilename(value)
-          break
-        case 'media-title':
-          setMediaTitle(value)
-          break
-        case 'duration':
-          setDuration(Math.floor(value))
-          break
-        case 'timeposition':
-          setTimePosition(Math.floor(value))
-          break
+      if (isMounted) {
+        switch (property) {
+          case 'path':
+            setPath(value)
+            break
+          case 'filename':
+            setFilename(value)
+            break
+          case 'media-title':
+            setMediaTitle(value)
+            break
+          case 'duration':
+            setDuration(Math.floor(value))
+            break
+          case 'timeposition':
+            setTimePosition(Math.floor(value))
+            break
+        }
       }
     })
+
+    return () => {
+      isMounted = false
+    }
   }, [socket])
 
   return file

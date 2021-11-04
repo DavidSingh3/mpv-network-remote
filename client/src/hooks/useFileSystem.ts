@@ -24,20 +24,29 @@ export default function useFileSystem (mimeTypeRegex?: RegExp): [
   const { addTask } = useContext(TasksContext)
 
   useEffect(() => {
+    let isMounted = true
     const task = addTask(`Loading ${path} ...`)
     getDirectoryEntities(path, mimeTypeRegex)
       .then(({ files, directories }) => {
-        setSuccess(true)
-        setError(null)
-        setFiles(files ?? [])
-        setDirectories(directories ?? [])
+        if (isMounted) {
+          setSuccess(true)
+          setError(null)
+          setFiles(files ?? [])
+          setDirectories(directories ?? [])
+        }
       })
       .catch((error) => {
-        setError(error.message)
+        if (isMounted) {
+          setError(error.message)
+        }
       })
       .finally(() => {
         task.finish()
       })
+
+    return () => {
+      isMounted = false
+    }
   }, [addTask, mimeTypeRegex, path])
 
   function setPathToParentDirectory () {

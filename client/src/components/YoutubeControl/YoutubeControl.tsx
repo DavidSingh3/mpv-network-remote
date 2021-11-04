@@ -16,6 +16,7 @@ export default function YoutubeControl () {
   const { addTask } = useContext(TasksContext)
 
   useEffect(() => {
+    let isMounted = true
     const opts: youtubeSearch.YouTubeSearchOptions = {
       maxResults: 10,
       key: process.env.REACT_APP_YOUTUBE_API_KEY
@@ -24,11 +25,17 @@ export default function YoutubeControl () {
     if (search.length) {
       youtubeSearch(search, opts)
         .then(({ pageInfo, results }) => {
-          setSearchResults(results)
+          if (isMounted) {
+            setSearchResults(results)
+          }
         })
         .catch(console.error)
     } else {
       setSearchResults([])
+    }
+
+    return () => {
+      isMounted = false
     }
   }, [search])
 

@@ -17,26 +17,33 @@ export default function useMpvInformation (): {
   const socket = useSocketIO()
 
   useEffect(() => {
+    let isMounted = true
     socket.emit('mpv-property-change-request')
     socket.on('mpv-property-change', (property, value) => {
-      switch (property) {
-        case 'mute':
-          setMute(value)
-          break
-        case 'pause':
-          setPause(value)
-          break
-        case 'fullscreen':
-          setFullscreen(value)
-          break
-        case 'volume':
-          setVolume(value)
-          break
-        case '':
-          setMute(value)
-          break
+      if (isMounted) {
+        switch (property) {
+          case 'mute':
+            setMute(value)
+            break
+          case 'pause':
+            setPause(value)
+            break
+          case 'fullscreen':
+            setFullscreen(value)
+            break
+          case 'volume':
+            setVolume(value)
+            break
+          case '':
+            setMute(value)
+            break
+        }
       }
     })
+
+    return () => {
+      isMounted = false
+    }
   }, [socket])
 
   return {
