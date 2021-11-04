@@ -18,7 +18,7 @@ export const TasksContext = createContext<TasksContextType>({
   }
 })
 
-export default function TaskManager (props: { children: ReactElement }) {
+export default function TasksContextManager (props: { children: ReactElement }) {
   const [tasks, setTasks] = useState<Task[]>([])
 
   const addTask = useRef((description: string) => {

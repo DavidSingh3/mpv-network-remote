@@ -6,6 +6,8 @@ import useBooleanState from '../../hooks/useBooleanState'
 import useMpvFile from '../../hooks/useMpvFile'
 import IconButton from '../IconButton/IconButton'
 
+const videoFileRegex = /^video\/.*$/
+
 export default function FileControl () {
   const file = useMpvFile()
   const [selectVideoFilePicker, flipOrSetSelectVideoFilePicker] = useBooleanState(false)
@@ -30,7 +32,7 @@ export default function FileControl () {
             title='Select video file'
             pickFileCallback={selectVideo}
             closeCallback={flipOrSetSelectVideoFilePicker}
-            mimeTypeRegex={/^video\/.*$/}
+            mimeTypeRegex={videoFileRegex}
           />
       }
       {

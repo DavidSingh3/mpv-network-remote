@@ -1,0 +1,38 @@
+.socketStatus {
+  font-size: 1.4rem;
+
+  div {
+    display: flex;
+    align-items: center;
+
+    span {
+      margin-left: 16px;
+      font-size: 1rem;
+      color: beige;
+    }
+
+    &.connected {
+      svg {
+        color: lawngreen;
+      }
+    }
+
+    &.disconnected {
+      svg {
+        color: orangered;
+      }
+
+    }
+  }
+}
+
+.disconnectedOverlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(3px);
+  z-index: 1;
+}

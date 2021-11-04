@@ -1,21 +1,27 @@
 import classes from './App.module.scss'
 import MediaControls from '../MediaControls/MediaControls'
-import useMpvInformation from '../../hooks/useMpvInformation'
 import FileControl from '../FileControl/FileControl'
 import YoutubeControl from '../YoutubeControl/YoutubeControl'
-import TaskManager from '../TaskManager/TaskManager'
+import TasksContextManager from '../TasksContextManager/TasksContextManager'
+import SocketStatus from '../SocketStatus/SocketStatus'
+import SocketContextManager from '../SocketContextManager/SocketContextManager'
 
 function App () {
-  const { file } = useMpvInformation()
-
   return (
-        <TaskManager>
-            <main className={classes.app}>
-                {file && <MediaControls file={file}/>}
-                <FileControl/>
-                <YoutubeControl/>
-            </main>
-        </TaskManager>
+        <TasksContextManager>
+            <SocketContextManager>
+                <div className={classes.app}>
+                    <main>
+                        <MediaControls/>
+                        <FileControl/>
+                        <YoutubeControl/>
+                    </main>
+                    <footer>
+                         <SocketStatus/>
+                    </footer>
+                </div>
+            </SocketContextManager>
+        </TasksContextManager>
   )
 }
 

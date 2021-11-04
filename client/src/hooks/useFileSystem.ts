@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { getDirectoryEntities } from '../util/getDirectoryEntities'
-import { TasksContext } from '../components/TaskManager/TaskManager'
+import { TasksContext } from '../components/TasksContextManager/TasksContextManager'
 
 export default function useFileSystem (mimeTypeRegex?: RegExp): [
     {

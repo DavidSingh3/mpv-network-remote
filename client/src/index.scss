@@ -5,4 +5,12 @@ body {
   font-family: sans-serif;
   background-color: $themeBackground;
   color: $themeColor;
+
+  #root {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
 }

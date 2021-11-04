@@ -4,9 +4,9 @@ import useMpvInformation from '../../hooks/useMpvInformation'
 import { MdPlayArrow, MdPause, MdStop, MdCloseFullscreen, MdFullscreen } from 'react-icons/md'
 import classes from './SeekBar.module.scss'
 import { setTimePosition, togglePause, stop, toggleFullscreen } from '../../util/mpvCommands'
-import { ChangeEvent, useEffect, useRef, useState } from 'react'
-import useSocketIO from '../../hooks/useSocketIO'
+import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react'
 import useDelay from '../../hooks/useDelay'
+import { SocketContext } from '../SocketContextManager/SocketContextManager'
 
 function formatSeconds (seconds: number) {
   const duration = intervalToDuration({ start: 0, end: seconds * 1_000 })
@@ -21,7 +21,7 @@ export default function SeekBar (props: {file: MPVFile}) {
   const { pause, fullscreen } = useMpvInformation()
   const timePassedHumanReadable = formatSeconds(props.file.timePosition)
   const durationHumanReadable = formatSeconds(props.file.duration)
-  const socket = useSocketIO()
+  const { socket } = useContext(SocketContext)
   const [controllerTimePosition, delayedControllerTimePosition, setControllerTimePosition] = useDelay<number>(props.file.timePosition)
   const [displayTimePosition, setDisplayTimePosition] = useState(props.file.timePosition)
   const isFirstRender = useRef(true)
@@ -44,7 +44,6 @@ export default function SeekBar (props: {file: MPVFile}) {
       return
     }
     setTimePosition(delayedControllerTimePosition).then(() => {
-      socket.emit('mpv-property-change-request')
     })
   }, [delayedControllerTimePosition, socket])
 

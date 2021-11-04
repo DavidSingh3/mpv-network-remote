@@ -7,7 +7,7 @@ import DelaySearchField from '../DelaySearchField/DelaySearchField'
 import { useContext, useEffect, useState } from 'react'
 import youtubeSearch, { YouTubeSearchResults } from 'youtube-search'
 import { selectURL } from '../../util/mpvCommands'
-import { TasksContext } from '../TaskManager/TaskManager'
+import { TasksContext } from '../TasksContextManager/TasksContextManager'
 
 export default function YoutubeControl () {
   const [showModal, flipOrSetShowModal] = useBooleanState(false)

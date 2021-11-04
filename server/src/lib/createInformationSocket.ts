@@ -7,16 +7,20 @@ export default function createInformationSocket (server: http.Server): void {
   const io = new Server(server, { cors: {} })
 
   io.on('connection', (socket) => {
-    console.info('a user connected')
+    console.info(socket.id, 'connected')
 
     function emitPropertyChange (property: string, value: string|boolean|number|null): void {
       socket.emit('mpv-property-change', property, value)
     }
 
+    socket.on('disconnect', () => {
+      console.info(socket.id, 'disconnected')
+    })
+
     ensureMpvIsRunning()
       .then(() => {
         socket.on('ready', () => {
-          console.info('a user is ready')
+          console.info(socket.id, 'ready')
           MPVWrapper.mpv.on('timeposition', (timeposition) => {
             emitPropertyChange('timeposition', timeposition)
           })

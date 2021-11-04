@@ -2,7 +2,7 @@ import { ImSpinner9 } from 'react-icons/im'
 import classes from './Spinner.module.scss'
 import { createPortal } from 'react-dom'
 import { useContext } from 'react'
-import { TasksContext } from '../TaskManager/TaskManager'
+import { TasksContext } from '../TasksContextManager/TasksContextManager'
 
 export default function Spinner () {
   const { tasks } = useContext(TasksContext)

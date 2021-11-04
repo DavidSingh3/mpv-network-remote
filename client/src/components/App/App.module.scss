@@ -1,5 +1,19 @@
 .app {
-  margin: 8px;
+  $margin: 8px;
+  margin: $margin;
   font-size: 1.3rem;
   user-select: none;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  height: calc(100% - #{$margin} * 2);
+
+  main {
+    overflow-y: auto;
+    z-index: 0;
+  }
+
+  footer {
+    margin-top: 8px;
+    z-index: 10;
+  }
 }

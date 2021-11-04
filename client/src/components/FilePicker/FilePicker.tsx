@@ -4,7 +4,7 @@ import { MdOutlineFolderOpen, MdOutlineFolder, MdDriveFolderUpload, MdOutlinePer
 import classes from './FilePicker.module.scss'
 import Modal from '../Modal/Modal'
 import { useContext } from 'react'
-import { TasksContext } from '../TaskManager/TaskManager'
+import { TasksContext } from '../TasksContextManager/TasksContextManager'
 
 function FilePicker (props: {
     title: string,
