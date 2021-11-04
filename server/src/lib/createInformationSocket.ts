@@ -1,6 +1,7 @@
 import { Server } from 'socket.io'
-import MPVWrapper, { startMPV } from './mpv'
+import MPVWrapper from './mpv'
 import http from 'http'
+import ensureMpvIsRunning from './mpv/ensureMpvIsRunning'
 
 export default function createInformationSocket (server: http.Server): void {
   const io = new Server(server, { cors: {} })
@@ -11,17 +12,8 @@ export default function createInformationSocket (server: http.Server): void {
     function emitPropertyChange (property: string, value: string|boolean|number|null): void {
       socket.emit('mpv-property-change', property, value)
     }
-    new Promise<void>((resolve, reject) => {
-      try {
-        if (!MPVWrapper.mpv.isRunning()) {
-          startMPV().then(resolve).catch(console.error)
-        } else {
-          resolve()
-        }
-      } catch (error) {
-        reject(error)
-      }
-    })
+
+    ensureMpvIsRunning()
       .then(() => {
         socket.on('ready', () => {
           console.info('a user is ready')

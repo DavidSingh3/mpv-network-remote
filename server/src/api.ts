@@ -1,9 +1,10 @@
 import Express, { Request } from 'express'
 import getDirectoryEntities from './lib/getDirectoryEntities'
-import MPVWrapper, { mpvErrorHandler, startMPV } from './lib/mpv'
+import MPVWrapper, { mpvErrorHandler } from './lib/mpv'
 import os from 'os'
 import { SeekMode } from 'node-mpv'
 import { appendToPublicBaseDir } from './lib/publicBaseDir'
+import ensureMpvIsRunning from './lib/mpv/ensureMpvIsRunning'
 
 const router = Express.Router()
 
@@ -21,13 +22,11 @@ router.get('/getDirectoryEntities', function (req: RequestWithQuery<{ path: stri
 })
 
 router.use(function (req, res, next) {
-  if (!MPVWrapper.mpv.isRunning()) {
-    startMPV().then(next).catch((error) => {
+  ensureMpvIsRunning()
+    .then(next)
+    .catch((error) => {
       res.status(500).send(error.message)
     })
-  } else {
-    next()
-  }
 })
 
 router.post('/selectVideo', function (req: RequestWithQuery<{ path: string, url: undefined }>|RequestWithQuery<{ url: string, path: undefined }>, res) {
