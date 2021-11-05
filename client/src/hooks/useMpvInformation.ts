@@ -2,11 +2,11 @@ import { useState } from 'react'
 import useSocketConnectedEffect from './useSocketConnectedEffect'
 
 export default function useMpvInformation (): {
-    mute: boolean,
-    pause: boolean,
-    fullscreen: boolean,
-    volume: number,
-    } {
+  mute: boolean,
+  pause: boolean,
+  fullscreen: boolean,
+  volume: number,
+  } {
   const [mute, setMute] = useState<boolean>(false)
   const [pause, setPause] = useState<boolean>(false)
   const [fullscreen, setFullscreen] = useState<boolean>(false)

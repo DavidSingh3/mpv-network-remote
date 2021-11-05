@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import useSocketConnectedEffect from './useSocketConnectedEffect'
 
 export type Chapter = {
-    time: number,
-    title: string
+  time: number,
+  title: string
 }
 
 export type Chapters = {
-    list: Chapter[],
-    index: number,
-    current: Chapter
+  list: Chapter[],
+  index: number,
+  current: Chapter
 }
 
 export default function useChapters (): Chapters | null {

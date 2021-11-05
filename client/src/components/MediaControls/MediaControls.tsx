@@ -7,9 +7,9 @@ import ChapterControl from '../ChapterControl/ChapterControl'
 export default function MediaControls () {
   const file = useMpvFile()
   return file && <div className={classes.mediaControls}>
-      <h4>{file.mediaTitle}</h4>
-      <SeekBar file={file}/>
-      <ChapterControl/>
-      <VolumeControl/>
-    </div>
+    <h4>{file.mediaTitle}</h4>
+    <SeekBar file={file}/>
+    <ChapterControl/>
+    <VolumeControl/>
+  </div>
 }

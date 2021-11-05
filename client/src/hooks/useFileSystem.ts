@@ -3,22 +3,22 @@ import { getDirectoryEntities } from '../util/getDirectoryEntities'
 import { TasksContext } from '../components/TasksContextManager/TasksContextManager'
 
 export default function useFileSystem (mimeTypeRegex?: RegExp): [
-    {
-        path: string,
-        success: boolean,
-        error: string|null,
-        files: Array<string>,
-        directories: Array<string>,
-    },
-    {
-        setPath:React.Dispatch<React.SetStateAction<string>>,
-        setPathToSubDirectory: (path: string) => void,
-        setPathToParentDirectory: () => void,
-    }
-    ] {
+  {
+    path: string,
+    success: boolean,
+    error: string | null,
+    files: Array<string>,
+    directories: Array<string>,
+  },
+  {
+    setPath: React.Dispatch<React.SetStateAction<string>>,
+    setPathToSubDirectory: (path: string) => void,
+    setPathToParentDirectory: () => void,
+  }
+] {
   const [path, setPath] = useState<string>('/')
   const [success, setSuccess] = useState<boolean>(false)
-  const [error, setError] = useState<string|null>(null)
+  const [error, setError] = useState<string | null>(null)
   const [files, setFiles] = useState<Array<string>>([])
   const [directories, setDirectories] = useState<Array<string>>([])
   const { addTask } = useContext(TasksContext)

@@ -1,6 +1,9 @@
 import getEndpointURL from './getEndpointURL'
 
-interface dirent {files: Array<string>, directories: Array<string>}
+interface dirent {
+  files: Array<string>,
+  directories: Array<string>
+}
 
 export async function getDirectoryEntities (path: string, mimeTypeRegex?: RegExp): Promise<dirent> {
   const urlSearchParams = mimeTypeRegex

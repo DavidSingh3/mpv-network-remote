@@ -8,20 +8,20 @@ import SocketContextManager from '../SocketContextManager/SocketContextManager'
 
 function App () {
   return (
-        <TasksContextManager>
-            <SocketContextManager>
-                <div className={classes.app}>
-                    <main>
-                        <MediaControls/>
-                        <FileControl/>
-                        <YoutubeControl/>
-                    </main>
-                    <footer>
-                         <SocketStatus/>
-                    </footer>
-                </div>
-            </SocketContextManager>
-        </TasksContextManager>
+    <TasksContextManager>
+      <SocketContextManager>
+        <div className={classes.app}>
+          <main>
+            <MediaControls/>
+            <FileControl/>
+            <YoutubeControl/>
+          </main>
+          <footer>
+            <SocketStatus/>
+          </footer>
+        </div>
+      </SocketContextManager>
+    </TasksContextManager>
   )
 }
 

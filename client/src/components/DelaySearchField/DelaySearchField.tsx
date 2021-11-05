@@ -3,7 +3,10 @@ import useDelay from '../../hooks/useDelay'
 import { useEffect } from 'react'
 import { MdSearch } from 'react-icons/md'
 
-export default function DelaySearchField ({ initialState, onChange }: {initialState: string, onChange: (searchTerm: string) => void}) {
+export default function DelaySearchField ({
+  initialState,
+  onChange
+}: { initialState: string, onChange: (searchTerm: string) => void }) {
   const [search, _search, setSearch] = useDelay(initialState)
   useEffect(function () {
     onChange(_search)
@@ -14,11 +17,11 @@ export default function DelaySearchField ({ initialState, onChange }: {initialSt
       <MdSearch className={classes.icon}/>
     </div>
     <input
-        className={classes.delaySearchField}
-        type="search"
-        placeholder="Search YouTube"
-        value={search}
-        onChange={(event) => setSearch(event.target.value)}
+      className={classes.delaySearchField}
+      type="search"
+      placeholder="Search YouTube"
+      value={search}
+      onChange={(event) => setSearch(event.target.value)}
     />
   </div>
 }

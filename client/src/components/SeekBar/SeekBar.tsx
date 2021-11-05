@@ -1,15 +1,15 @@
 import { MPVFile } from '../../hooks/useMpvFile'
 import useMpvInformation from '../../hooks/useMpvInformation'
-import { MdPlayArrow, MdPause, MdStop, MdCloseFullscreen, MdFullscreen } from 'react-icons/md'
+import { MdCloseFullscreen, MdFullscreen, MdPause, MdPlayArrow, MdStop } from 'react-icons/md'
 import classes from './SeekBar.module.scss'
-import { setTimePosition, togglePause, stop, toggleFullscreen } from '../../util/mpvCommands'
+import { setTimePosition, stop, toggleFullscreen, togglePause } from '../../util/mpvCommands'
 import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react'
 import useDelay from '../../hooks/useDelay'
 import { SocketContext } from '../SocketContextManager/SocketContextManager'
 import secondsToTimestamp from '../../util/secondsToTimestamp'
 import { TasksContext } from '../TasksContextManager/TasksContextManager'
 
-export default function SeekBar (props: {file: MPVFile}) {
+export default function SeekBar (props: { file: MPVFile }) {
   const { pause, fullscreen } = useMpvInformation()
   const timePassedHumanReadable = secondsToTimestamp(props.file.timePosition)
   const durationHumanReadable = secondsToTimestamp(props.file.duration)
@@ -63,13 +63,13 @@ export default function SeekBar (props: {file: MPVFile}) {
       <span className={classes.durationHumanReadable}>/&nbsp;{durationHumanReadable}</span>
     </div>
     <input
-        className={classes.slider}
-        type="range"
-        min="0"
-        max={props.file.duration}
-        value={displayTimePosition}
-        onChange={handleChangeSlider}
-        id="myRange"
+      className={classes.slider}
+      type="range"
+      min="0"
+      max={props.file.duration}
+      value={displayTimePosition}
+      onChange={handleChangeSlider}
+      id="myRange"
     />
   </nav>
 }

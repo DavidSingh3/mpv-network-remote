@@ -33,6 +33,6 @@ export default function SocketContextManager (props: { children: ReactElement })
   }, [])
 
   return <SocketContext.Provider value={{ socket, connected }}>
-        {props.children}
-    </SocketContext.Provider>
+    {props.children}
+  </SocketContext.Provider>
 }

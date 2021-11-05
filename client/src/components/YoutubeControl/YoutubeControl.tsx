@@ -24,7 +24,7 @@ export default function YoutubeControl () {
 
     if (search.length) {
       youtubeSearch(search, opts)
-        .then(({ pageInfo, results }) => {
+        .then(({ results }) => {
           if (isMounted) {
             setSearchResults(results)
           }
@@ -48,29 +48,29 @@ export default function YoutubeControl () {
   }
 
   return <div className={classes.youtubeControl}>
-        <IconButton
-            Icon={ImYoutube2}
-            text="Search on YouTube"
-            className={classes.selectVideoButton}
-            onClick={flipOrSetShowModal}
-        />
-        {
-            showModal && <Modal closeCallback={flipOrSetShowModal} title="Choose a video">
-              <div className={classes.modalBody}>
-                <DelaySearchField initialState={search} onChange={setSearch}/>
-                <div className={classes.results}>
-                    {searchResults.map((searchResult) => {
-                      return <div key={searchResult.id} className={classes.result}
-                                    onClick={handleClickVideo(searchResult.link)}>
-                            <img className={classes.thumb} src={searchResult.thumbnails.default?.url} alt=""/>
-                            <div className={classes.title}>{searchResult.title}</div>
-                            <div className={classes.channelTitle}>{searchResult.channelTitle}</div>
-                            <div className={classes.description}>{searchResult.description}</div>
-                        </div>
-                    })}
-                </div>
+    <IconButton
+      Icon={ImYoutube2}
+      text="Search on YouTube"
+      className={classes.selectVideoButton}
+      onClick={flipOrSetShowModal}
+    />
+    {
+      showModal && <Modal closeCallback={flipOrSetShowModal} title="Choose a video">
+        <div className={classes.modalBody}>
+          <DelaySearchField initialState={search} onChange={setSearch}/>
+          <div className={classes.results}>
+            {searchResults.map((searchResult) => {
+              return <div key={searchResult.id} className={classes.result}
+                          onClick={handleClickVideo(searchResult.link)}>
+                <img className={classes.thumb} src={searchResult.thumbnails.default?.url} alt=""/>
+                <div className={classes.title}>{searchResult.title}</div>
+                <div className={classes.channelTitle}>{searchResult.channelTitle}</div>
+                <div className={classes.description}>{searchResult.description}</div>
               </div>
-            </Modal>
-        }
-    </div>
+            })}
+          </div>
+        </div>
+      </Modal>
+    }
+  </div>
 }

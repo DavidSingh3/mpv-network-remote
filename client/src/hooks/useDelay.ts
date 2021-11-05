@@ -1,9 +1,9 @@
 import { Dispatch, useEffect, useState } from 'react'
 
-export default function useDelay<Type=string> (initialState: Type): [Type, Type, Dispatch<Type>] {
+export default function useDelay<Type = string> (initialState: Type): [Type, Type, Dispatch<Type>] {
   const [value, setValue] = useState<Type>(initialState)
   const [delayedValue, setDelayedValue] = useState<Type>(initialState)
-  const [timer, setTimer] = useState<{id: number, value: Type}|null>(null)
+  const [timer, setTimer] = useState<{ id: number, value: Type } | null>(null)
 
   useEffect(() => {
     if (timer?.value === value) {

@@ -10,16 +10,16 @@ export default function Spinner () {
   return tasks.length
     ? createPortal(
       <div className={classes.spinner}>
-          <ImSpinner9 className={classes.icon}/>
-          <div className={classes.tasksList}>
-              {
-                  tasks.map((task, index) => {
-                    return <div key={index}>
-                          {task.description}
-                      </div>
-                  })
-              }
-          </div>
+        <ImSpinner9 className={classes.icon}/>
+        <div className={classes.tasksList}>
+          {
+            tasks.map((task, index) => {
+              return <div key={index}>
+                {task.description}
+              </div>
+            })
+          }
+        </div>
       </div>,
       document.body
     )

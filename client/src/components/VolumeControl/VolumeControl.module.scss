@@ -7,15 +7,19 @@
   button {
     font-size: 2rem;
   }
+
   .display {
     grid-area: display;
   }
+
   .downButton {
     grid-area: down;
   }
+
   .muteButton {
     grid-area: mute;
   }
+
   .upButton {
     grid-area: up;
   }

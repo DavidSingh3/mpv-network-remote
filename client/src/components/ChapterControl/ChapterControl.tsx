@@ -32,36 +32,36 @@ export default function ChapterControl () {
   const chapters = chaptersOrNull as Chapters
 
   return <div className={classes.chapterControl}>
-        <IconButton
-            className={classes.mainButton}
-            Icon={MdFormatListNumbered}
-            onClick={flipOrSetShowModal}
-            text={chapters.current.title}
-        />
-        {
-            showModal && <Modal title='Chapters' closeCallback={flipOrSetShowModal}>
-              <div className={classes.modalInner}>
-                  {
-                      chapters.list.map((chapter, index) => {
-                        const classNames = [classes.chapter]
-                        if (index === chapters.index) {
-                          classNames.push(classes.currentChapter)
-                        }
-                        const startTime = secondsToTimestamp(chapter.time)
-                        const endTime = index === chapters.list.length - 1
-                          ? secondsToTimestamp(file?.duration ?? 0)
-                          : secondsToTimestamp(chapters.list[index + 1].time)
-                        return <div
-                              key={index}
-                              className={classNames.join(' ')}
-                              onClick={() => selectChapter(chapter)}
-                          >
-                              ({startTime} - {endTime}) {chapter.title}
-                          </div>
-                      })
-                  }
+    <IconButton
+      className={classes.mainButton}
+      Icon={MdFormatListNumbered}
+      onClick={flipOrSetShowModal}
+      text={chapters.current.title}
+    />
+    {
+      showModal && <Modal title='Chapters' closeCallback={flipOrSetShowModal}>
+        <div className={classes.modalInner}>
+          {
+            chapters.list.map((chapter, index) => {
+              const classNames = [classes.chapter]
+              if (index === chapters.index) {
+                classNames.push(classes.currentChapter)
+              }
+              const startTime = secondsToTimestamp(chapter.time)
+              const endTime = index === chapters.list.length - 1
+                ? secondsToTimestamp(file?.duration ?? 0)
+                : secondsToTimestamp(chapters.list[index + 1].time)
+              return <div
+                key={index}
+                className={classNames.join(' ')}
+                onClick={() => selectChapter(chapter)}
+              >
+                ({startTime} - {endTime}) {chapter.title}
               </div>
-            </Modal>
-        }
-    </div>
+            })
+          }
+        </div>
+      </Modal>
+    }
+  </div>
 }
