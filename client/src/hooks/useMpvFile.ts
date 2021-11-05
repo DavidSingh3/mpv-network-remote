@@ -51,7 +51,7 @@ export default function useMpvFile (): MPVFile|null {
           break
       }
     })
-    socket.emit('mpv-property-change-request')
+    socket.emit('mpv-request')
   })
 
   return file

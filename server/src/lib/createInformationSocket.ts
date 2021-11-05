@@ -1,65 +1,63 @@
-import { Server } from 'socket.io'
+import { Server, Socket } from 'socket.io'
 import MPVWrapper from './mpv'
 import http from 'http'
-import ensureMpvIsRunning from './mpv/ensureMpvIsRunning'
+
+function emitPropertyChange (socket: Socket, property: string, value: string|boolean|number|null): void {
+  socket.emit('mpv-property-change', property, value)
+}
+
+function subscribe (socket: Socket) {
+  return () => {
+    console.info(socket.id, 'subscribed to updates')
+    MPVWrapper.mpv.on('timeposition', (timeposition) => {
+      emitPropertyChange(socket, 'timeposition', timeposition)
+    })
+    MPVWrapper.mpv.on('status', ({
+      property,
+      value
+    }) => {
+      emitPropertyChange(socket, property, value)
+    })
+  }
+}
+
+function request (socket: Socket) {
+  return () => {
+    console.info(socket.id, 'requested an update')
+    const properties = [
+      'mute',
+      'duration',
+      'volume',
+      'filename',
+      'path',
+      'media-title',
+      'fullscreen'
+    ]
+
+    properties.forEach((property) => {
+      MPVWrapper.mpv.getProperty(property).then((value) => {
+        emitPropertyChange(socket, property, value)
+      }).catch(() => {
+        emitPropertyChange(socket, property, null)
+      })
+    })
+    MPVWrapper.mpv.getTimePosition()
+      .then((value) => emitPropertyChange(socket, 'timeposition', value))
+      .catch(() => {
+        emitPropertyChange(socket, 'timeposition', 0)
+      })
+    MPVWrapper.mpv.isPaused()
+      .then((value) => emitPropertyChange(socket, 'pause', value))
+      .catch(console.error)
+  }
+}
 
 export default function createInformationSocket (server: http.Server): void {
   const io = new Server(server, { cors: {} })
-
   io.on('connection', (socket) => {
     console.info(socket.id, 'connected')
-
-    function emitPropertyChange (property: string, value: string|boolean|number|null): void {
-      socket.emit('mpv-property-change', property, value)
-    }
-
-    socket.on('disconnect', () => {
-      console.info(socket.id, 'disconnected')
-    })
-
-    ensureMpvIsRunning()
-      .then(() => {
-        socket.on('ready', () => {
-          console.info(socket.id, 'ready')
-          MPVWrapper.mpv.on('timeposition', (timeposition) => {
-            emitPropertyChange('timeposition', timeposition)
-          })
-          MPVWrapper.mpv.on('status', ({
-            property,
-            value
-          }) => {
-            emitPropertyChange(property, value)
-          })
-        })
-
-        socket.on('mpv-property-change-request', () => {
-          const properties = [
-            'mute',
-            'duration',
-            'volume',
-            'filename',
-            'path',
-            'media-title',
-            'fullscreen'
-          ]
-
-          properties.forEach((property) => {
-            MPVWrapper.mpv.getProperty(property).then((value) => {
-              emitPropertyChange(property, value)
-            }).catch(() => {
-              emitPropertyChange(property, null)
-            })
-          })
-          MPVWrapper.mpv.getTimePosition()
-            .then((value) => emitPropertyChange('timeposition', value))
-            .catch(() => {
-              emitPropertyChange('timeposition', 0)
-            })
-          MPVWrapper.mpv.isPaused()
-            .then((value) => emitPropertyChange('pause', value))
-            .catch(console.error)
-        })
-      })
-      .catch(console.error)
+    socket.on('disconnect', () => console.info(socket.id, 'disconnected'))
+    socket.on('mpv-subscribe', subscribe(socket))
+    socket.on('mpv-request', request(socket))
   })
 }

@@ -22,8 +22,8 @@ export default function SocketContextManager (props: { children: ReactElement })
     setConnected(socket.connected)
     socket.on('connect', () => {
       process.nextTick(() => {
-        socket.emit('ready')
-        socket.emit('mpv-property-change-request')
+        socket.emit('mpv-subscribe')
+        socket.emit('mpv-request')
         setConnected(socket.connected)
       })
     })
