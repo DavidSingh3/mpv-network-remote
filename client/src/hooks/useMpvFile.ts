@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import useChapters, { Chapters } from './useChapters'
 import useSocketConnectedEffect from './useSocketConnectedEffect'
 
 export type MPVFile = {
@@ -7,6 +8,7 @@ export type MPVFile = {
     mediaTitle: string,
     duration: number,
     timePosition: number,
+    chapters: Chapters|null
 }
 
 export default function useMpvFile (): MPVFile|null {
@@ -16,6 +18,7 @@ export default function useMpvFile (): MPVFile|null {
   const [mediaTitle, setMediaTitle] = useState<string|null>(null)
   const [duration, setDuration] = useState<number|null>(null)
   const [timePosition, setTimePosition] = useState<number|null>(null)
+  const chapters = useChapters()
 
   useEffect(() => {
     if ([path, filename, mediaTitle, duration, timePosition].includes(null)) {
@@ -26,13 +29,14 @@ export default function useMpvFile (): MPVFile|null {
         filename: filename as string,
         mediaTitle: mediaTitle as string,
         duration: duration as number,
-        timePosition: timePosition as number
+        timePosition: timePosition as number,
+        chapters
       })
     }
-  }, [path, filename, mediaTitle, duration, timePosition])
+  }, [path, filename, mediaTitle, duration, timePosition, chapters])
 
   useSocketConnectedEffect((socket) => {
-    socket.on('mpv-property-change', (property, value) => {
+    const listener = (property: any, value: any) => {
       switch (property) {
         case 'path':
           setPath(value)
@@ -50,8 +54,12 @@ export default function useMpvFile (): MPVFile|null {
           setTimePosition(Math.floor(value))
           break
       }
-    })
+    }
+    socket.on('mpv-property-change', listener)
     socket.emit('mpv-request')
+    return () => {
+      socket.removeListener('mpv-property-change', listener)
+    }
   })
 
   return file

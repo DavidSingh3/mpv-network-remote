@@ -4,6 +4,9 @@
   grid-template-rows: auto;
   grid-template-areas: "display display display" "down mute up";
 
+  button {
+    font-size: 2rem;
+  }
   .display {
     grid-area: display;
   }

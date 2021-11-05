@@ -9,6 +9,8 @@ function emitPropertyChange (socket: Socket, property: string, value: string|boo
 function subscribe (socket: Socket) {
   return () => {
     console.info(socket.id, 'subscribed to updates')
+    MPVWrapper.mpv.observeProperty('chapter-list')
+    MPVWrapper.mpv.observeProperty('chapter')
     MPVWrapper.mpv.on('timeposition', (timeposition) => {
       emitPropertyChange(socket, 'timeposition', timeposition)
     })
@@ -31,7 +33,9 @@ function request (socket: Socket) {
       'filename',
       'path',
       'media-title',
-      'fullscreen'
+      'fullscreen',
+      'chapter-list',
+      'chapter'
     ]
 
     properties.forEach((property) => {

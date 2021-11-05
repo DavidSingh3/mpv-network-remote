@@ -1,5 +1,4 @@
 import { MPVFile } from '../../hooks/useMpvFile'
-import { intervalToDuration } from 'date-fns'
 import useMpvInformation from '../../hooks/useMpvInformation'
 import { MdPlayArrow, MdPause, MdStop, MdCloseFullscreen, MdFullscreen } from 'react-icons/md'
 import classes from './SeekBar.module.scss'
@@ -7,24 +6,18 @@ import { setTimePosition, togglePause, stop, toggleFullscreen } from '../../util
 import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react'
 import useDelay from '../../hooks/useDelay'
 import { SocketContext } from '../SocketContextManager/SocketContextManager'
-
-function formatSeconds (seconds: number) {
-  const duration = intervalToDuration({ start: 0, end: seconds * 1_000 })
-  return [
-    duration.hours ?? 0,
-    duration.minutes ?? 0,
-    duration.seconds ?? 0
-  ].map((n) => n.toString().padStart(2, '0')).join(':')
-}
+import secondsToTimestamp from '../../util/secondsToTimestamp'
+import { TasksContext } from '../TasksContextManager/TasksContextManager'
 
 export default function SeekBar (props: {file: MPVFile}) {
   const { pause, fullscreen } = useMpvInformation()
-  const timePassedHumanReadable = formatSeconds(props.file.timePosition)
-  const durationHumanReadable = formatSeconds(props.file.duration)
+  const timePassedHumanReadable = secondsToTimestamp(props.file.timePosition)
+  const durationHumanReadable = secondsToTimestamp(props.file.duration)
   const { socket } = useContext(SocketContext)
   const [controllerTimePosition, delayedControllerTimePosition, setControllerTimePosition] = useDelay<number>(props.file.timePosition)
   const [displayTimePosition, setDisplayTimePosition] = useState(props.file.timePosition)
   const isFirstRender = useRef(true)
+  const { addTask } = useContext(TasksContext)
 
   function handleChangeSlider (event: ChangeEvent<HTMLInputElement>) {
     setControllerTimePosition(parseInt(event.target.value ?? 0, 10))
@@ -43,9 +36,9 @@ export default function SeekBar (props: {file: MPVFile}) {
       isFirstRender.current = false
       return
     }
-    setTimePosition(delayedControllerTimePosition).then(() => {
-    })
-  }, [delayedControllerTimePosition, socket])
+    const task = addTask('Loading')
+    setTimePosition(delayedControllerTimePosition).finally(task.finish)
+  }, [addTask, delayedControllerTimePosition, socket])
 
   return <nav className={classes.seekBar}>
     <button className={classes.playButton} onClick={togglePause}>

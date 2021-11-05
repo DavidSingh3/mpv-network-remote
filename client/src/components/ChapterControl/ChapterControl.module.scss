@@ -1,0 +1,19 @@
+.chapterControl {
+  display: grid;
+
+  .mainButton {
+    font-size: 1rem;
+    svg {
+      font-size: 2rem;
+    }
+  }
+
+  .modalInner {
+    .chapter {
+      margin: 8px;
+      &.currentChapter {
+        color: green;
+      }
+    }
+  }
+}
