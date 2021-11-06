@@ -1,7 +1,6 @@
 import Express, { Request } from 'express'
 import getDirectoryEntities from './lib/getDirectoryEntities'
 import MPVWrapper, { mpvErrorHandler } from './lib/mpv'
-import os from 'os'
 import { SeekMode } from 'node-mpv'
 import { appendToPublicBaseDir } from './lib/publicBaseDir'
 import ensureMpvIsRunning from './lib/mpv/ensureMpvIsRunning'
@@ -50,7 +49,7 @@ router.post('/selectVideo', function (req: RequestWithQuery<{ path: string, url:
 
 router.post('/addSubtitles', function (req: RequestWithQuery<{ path: string }>, res) {
   mpvErrorHandler(async () => {
-    await MPVWrapper.mpv.addSubtitles(os.homedir().concat(req.query.path))
+    await MPVWrapper.mpv.addSubtitles(appendToPublicBaseDir(req.query.path))
   })
     .then(() => {
       res.status(200).send()

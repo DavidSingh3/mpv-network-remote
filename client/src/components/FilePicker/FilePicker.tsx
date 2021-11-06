@@ -20,7 +20,7 @@ function FilePicker (props: {
     props.pickFileCallback(fileSystem.path.concat(name))
       .then(props.closeCallback)
       .catch((error) => {
-        console.log('there is an error:', error.message)
+        alert(error.message)
       })
       .finally(task.finish)
   }
