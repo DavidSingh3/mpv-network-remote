@@ -2,7 +2,7 @@ import { MPVFile } from '../../hooks/useMpvFile'
 import useMpvInformation from '../../hooks/useMpvInformation'
 import { MdCloseFullscreen, MdFullscreen, MdPause, MdPlayArrow, MdStop } from 'react-icons/md'
 import classes from './SeekBar.module.scss'
-import { setTimePosition, stop, toggleFullscreen, togglePause } from '../../util/mpvCommands'
+import useMpvCommands from '../../hooks/useMpvCommands'
 import { ChangeEvent, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import useDelay from '../../hooks/useDelay'
 import { SocketContext } from '../SocketContextManager/SocketContextManager'
@@ -18,6 +18,7 @@ export default function SeekBar (props: { file: MPVFile }) {
   const [displayTimePosition, setDisplayTimePosition] = useState(props.file.timePosition)
   const isFirstRender = useRef(true)
   const { addTask } = useContext(TasksContext)
+  const { setTimePosition, stop, toggleFullscreen, togglePause } = useMpvCommands()
 
   const handleChangeSlider = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setControllerTimePosition(parseInt(event.target.value ?? 0, 10))

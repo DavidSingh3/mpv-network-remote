@@ -6,7 +6,7 @@ import Modal from '../Modal/Modal'
 import DelaySearchField from '../DelaySearchField/DelaySearchField'
 import { useCallback, useContext, useEffect, useState } from 'react'
 import youtubeSearch, { YouTubeSearchResults } from 'youtube-search'
-import { selectURL } from '../../util/mpvCommands'
+import useMpvCommands from '../../hooks/useMpvCommands'
 import { TasksContext } from '../TasksContextManager/TasksContextManager'
 
 export default function YoutubeControl () {
@@ -14,6 +14,7 @@ export default function YoutubeControl () {
   const [search, setSearch] = useState('')
   const [searchResults, setSearchResults] = useState<YouTubeSearchResults[]>([])
   const { addTask } = useContext(TasksContext)
+  const { selectURL } = useMpvCommands()
 
   useEffect(() => {
     let isMounted = true

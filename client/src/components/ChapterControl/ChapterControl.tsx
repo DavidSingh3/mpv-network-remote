@@ -5,7 +5,7 @@ import { MdFormatListNumbered } from 'react-icons/all'
 import useBooleanState from '../../hooks/useBooleanState'
 import Modal from '../Modal/Modal'
 import { useCallback, useContext } from 'react'
-import { setTimePosition } from '../../util/mpvCommands'
+import useMpvCommands from '../../hooks/useMpvCommands'
 import { TasksContext } from '../TasksContextManager/TasksContextManager'
 import secondsToTimestamp from '../../util/secondsToTimestamp'
 import useMpvFile from '../../hooks/useMpvFile'
@@ -15,6 +15,7 @@ export default function ChapterControl () {
   const chaptersOrNull = useChapters()
   const [showModal, flipOrSetShowModal] = useBooleanState(false)
   const { addTask } = useContext(TasksContext)
+  const { setTimePosition } = useMpvCommands()
 
   const selectChapter = useCallback((chapter: Chapter) => {
     const task = addTask(`Loading ${chapter.title}`)

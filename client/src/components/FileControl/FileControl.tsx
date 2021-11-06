@@ -1,6 +1,6 @@
 import classes from './FileControl.module.scss'
 import FilePicker from '../FilePicker/FilePicker'
-import { addSubtitles, selectVideo } from '../../util/mpvCommands'
+import useMpvCommands from '../../hooks/useMpvCommands'
 import { MdOndemandVideo, MdTranslate } from 'react-icons/md'
 import useBooleanState from '../../hooks/useBooleanState'
 import useMpvFile from '../../hooks/useMpvFile'
@@ -12,6 +12,8 @@ export default function FileControl () {
   const file = useMpvFile()
   const [selectVideoFilePicker, flipOrSetSelectVideoFilePicker] = useBooleanState(false)
   const [selectSubtitlesFilePicker, flipOrSetSelectSubtitlesFilePicker] = useBooleanState(false)
+  const { addSubtitles, selectVideo } = useMpvCommands()
+
   return <div className={classes.fileControl}>
     <IconButton
       Icon={MdOndemandVideo}

@@ -1,10 +1,11 @@
 import classes from './VolumeControl.module.scss'
-import { adjustVolumeDown, adjustVolumeUp, toggleMute } from '../../util/mpvCommands'
+import useMpvCommands from '../../hooks/useMpvCommands'
 import { MdVolumeDown, MdVolumeMute, MdVolumeOff, MdVolumeUp } from 'react-icons/md'
 import useMpvInformation from '../../hooks/useMpvInformation'
 
 export default function VolumeControl () {
   const { mute, volume } = useMpvInformation()
+  const { adjustVolumeDown, adjustVolumeUp, toggleMute } = useMpvCommands()
 
   return <div className={classes.volumeControl}>
     <button className={classes.downButton} onClick={adjustVolumeDown}>{<MdVolumeDown/>}</button>
