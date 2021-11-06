@@ -23,7 +23,7 @@ export default function ChapterControl () {
         flipOrSetShowModal(false)
       })
       .finally(task.finish)
-  }, [addTask, flipOrSetShowModal])
+  }, [addTask, flipOrSetShowModal, setTimePosition])
 
   if (chaptersOrNull === null) {
     return null

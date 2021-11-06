@@ -3,7 +3,7 @@ import Error from '../Error/Error'
 import { MdDriveFolderUpload, MdOutlineFolder, MdOutlineFolderOpen, MdOutlinePermMedia } from 'react-icons/md'
 import classes from './FilePicker.module.scss'
 import Modal from '../Modal/Modal'
-import { useContext } from 'react'
+import { useCallback, useContext } from 'react'
 import { TasksContext } from '../TasksContextManager/TasksContextManager'
 
 function FilePicker (props: {
@@ -15,7 +15,7 @@ function FilePicker (props: {
   const [fileSystem, { setPathToParentDirectory, setPathToSubDirectory }] = useFileSystem(props.mimeTypeRegex)
   const { addTask } = useContext(TasksContext)
 
-  const handleSelectFile = (name: string) => () => {
+  const handleSelectFile = useCallback((name: string) => () => {
     const task = addTask(`Opening ${name} ...`)
     props.pickFileCallback(fileSystem.path.concat(name))
       .then(props.closeCallback)
@@ -23,7 +23,7 @@ function FilePicker (props: {
         alert(error.message)
       })
       .finally(task.finish)
-  }
+  }, [addTask, fileSystem.path, props])
 
   return <Modal closeCallback={props.closeCallback} title={props.title}>
     <div className={classes.filePicker}>

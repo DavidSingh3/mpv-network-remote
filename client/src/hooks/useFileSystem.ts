@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { getDirectoryEntities } from '../util/getDirectoryEntities'
 import { TasksContext } from '../components/TasksContextManager/TasksContextManager'
 
@@ -49,15 +49,15 @@ export default function useFileSystem (mimeTypeRegex?: RegExp): [
     }
   }, [addTask, mimeTypeRegex, path])
 
-  function setPathToParentDirectory () {
+  const setPathToParentDirectory = useCallback(() => {
     if (path !== '/') {
       setPath(path.replace(/[^/]+\/?$/, ''))
     }
-  }
+  }, [path])
 
-  function setPathToSubDirectory (directory: string) {
+  const setPathToSubDirectory = useCallback((directory: string) => {
     setPath(path.replace(/\/?$/, '/').concat(directory).concat('/'))
-  }
+  }, [path])
 
   return [
     { path, success, error, files, directories },

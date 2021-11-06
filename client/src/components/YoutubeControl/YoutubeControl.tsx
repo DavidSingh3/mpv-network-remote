@@ -4,7 +4,7 @@ import IconButton from '../IconButton/IconButton'
 import useBooleanState from '../../hooks/useBooleanState'
 import Modal from '../Modal/Modal'
 import DelaySearchField from '../DelaySearchField/DelaySearchField'
-import { useContext, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import youtubeSearch, { YouTubeSearchResults } from 'youtube-search'
 import { selectURL } from '../../util/mpvCommands'
 import { TasksContext } from '../TasksContextManager/TasksContextManager'
@@ -39,13 +39,13 @@ export default function YoutubeControl () {
     }
   }, [search])
 
-  function handleClickVideo (url: string) {
+  const handleClickVideo = useCallback((url: string) => {
     return () => {
       const task = addTask('Opening YouTube video ...')
       selectURL(url).catch(console.error).finally(task.finish)
       flipOrSetShowModal()
     }
-  }
+  }, [addTask, flipOrSetShowModal, selectURL])
 
   return <div className={classes.youtubeControl}>
     <IconButton

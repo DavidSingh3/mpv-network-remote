@@ -3,7 +3,7 @@ import useMpvInformation from '../../hooks/useMpvInformation'
 import { MdCloseFullscreen, MdFullscreen, MdPause, MdPlayArrow, MdStop } from 'react-icons/md'
 import classes from './SeekBar.module.scss'
 import { setTimePosition, stop, toggleFullscreen, togglePause } from '../../util/mpvCommands'
-import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import useDelay from '../../hooks/useDelay'
 import { SocketContext } from '../SocketContextManager/SocketContextManager'
 import secondsToTimestamp from '../../util/secondsToTimestamp'
@@ -19,9 +19,9 @@ export default function SeekBar (props: { file: MPVFile }) {
   const isFirstRender = useRef(true)
   const { addTask } = useContext(TasksContext)
 
-  function handleChangeSlider (event: ChangeEvent<HTMLInputElement>) {
+  const handleChangeSlider = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setControllerTimePosition(parseInt(event.target.value ?? 0, 10))
-  }
+  }, [setControllerTimePosition])
 
   useEffect(function () {
     if (controllerTimePosition !== delayedControllerTimePosition) {
@@ -38,7 +38,7 @@ export default function SeekBar (props: { file: MPVFile }) {
     }
     const task = addTask('Loading')
     setTimePosition(delayedControllerTimePosition).finally(task.finish)
-  }, [addTask, delayedControllerTimePosition, socket])
+  }, [addTask, delayedControllerTimePosition, setTimePosition, socket])
 
   return <nav className={classes.seekBar}>
     <button className={classes.playButton} onClick={togglePause}>
