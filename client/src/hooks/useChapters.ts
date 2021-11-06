@@ -13,16 +13,16 @@ export type Chapters = {
 }
 
 export default function useChapters (): Chapters | null {
-  const [list, setList] = useState<Chapter[] | null>(null)
+  const [list, setList] = useState<Chapter[]>([])
   const [index, setIndex] = useState<number | null>(null)
   const [chapters, setChapters] = useState<Chapters | null>(null)
 
   useEffect(() => {
-    if ([list, index].includes(null)) {
+    if (list.length === 0 || index === null) {
       setChapters(null)
     } else {
       setChapters({
-        list: list as Chapter[],
+        list,
         index: index as number,
         current: list?.[index as number] as Chapter
       })
