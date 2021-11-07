@@ -4,11 +4,12 @@ import IconButton from '../IconButton/IconButton'
 import { MdFormatListNumbered } from 'react-icons/all'
 import useBooleanState from '../../hooks/useBooleanState'
 import Modal from '../Modal/Modal'
-import { useCallback, useContext } from 'react'
+import { useCallback, useContext, useEffect } from 'react'
 import useMpvCommands from '../../hooks/useMpvCommands'
 import { TasksContext } from '../TasksContextManager/TasksContextManager'
 import secondsToTimestamp from '../../util/secondsToTimestamp'
 import useMpvFile from '../../hooks/useMpvFile'
+import useIsMounted from '../../hooks/useIsMounted'
 
 export default function ChapterControl () {
   const file = useMpvFile()
@@ -16,15 +17,21 @@ export default function ChapterControl () {
   const [showModal, flipOrSetShowModal] = useBooleanState(false)
   const { addTask } = useContext(TasksContext)
   const { setTimePosition } = useMpvCommands()
+  const isMounted = useIsMounted()
 
   const selectChapter = useCallback((chapter: Chapter) => {
-    const task = addTask(`Loading ${chapter.title}`)
-    setTimePosition(chapter.time)
-      .then(() => {
-        flipOrSetShowModal(false)
-      })
-      .finally(task.finish)
-  }, [addTask, flipOrSetShowModal, setTimePosition])
+    if (isMounted()) {
+      const task = addTask(`Loading ${chapter.title}`)
+      setTimePosition(chapter.time)
+        .then(() => {
+          if (isMounted()) {
+            flipOrSetShowModal(false)
+            console.log('updated')
+          }
+        })
+        .finally(task.finish)
+    }
+  }, [addTask, flipOrSetShowModal, isMounted, setTimePosition])
 
   if (chaptersOrNull === null) {
     return null

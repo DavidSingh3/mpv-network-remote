@@ -4,15 +4,19 @@ import { createPortal } from 'react-dom'
 import { useContext, useEffect } from 'react'
 import { TasksContext } from '../TasksContextManager/TasksContextManager'
 import useBooleanState from '../../hooks/useBooleanState'
+import useIsMounted from '../../hooks/useIsMounted'
 
 export default function Spinner () {
   const { tasks } = useContext(TasksContext)
   const [showSpinner, flipOrSetShowSpinner] = useBooleanState(false)
+  const isMounted = useIsMounted()
 
   useEffect(() => {
     if (tasks.length) {
       const timeout = window.setTimeout(() => {
-        flipOrSetShowSpinner(true)
+        if (isMounted()) {
+          flipOrSetShowSpinner(true)
+        }
       }, 300)
 
       return () => {
@@ -21,7 +25,7 @@ export default function Spinner () {
     } else {
       flipOrSetShowSpinner(false)
     }
-  }, [flipOrSetShowSpinner, tasks.length])
+  }, [flipOrSetShowSpinner, isMounted, tasks.length])
 
   return showSpinner
     ? createPortal(

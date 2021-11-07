@@ -1,6 +1,7 @@
 import { createContext, ReactElement, useEffect, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
 import getEndpointURL from '../../util/getEndpointURL'
+import useIsMounted from '../../hooks/useIsMounted'
 
 const url = getEndpointURL('/').toString()
 const socket = io(url)
@@ -17,20 +18,27 @@ export const SocketContext = createContext<SocketContextType>({
 
 export default function SocketContextManager (props: { children: ReactElement }) {
   const [connected, setConnected] = useState(false)
+  const isMounted = useIsMounted()
 
   useEffect(() => {
     setConnected(socket.connected)
     socket.on('connect', () => {
-      process.nextTick(() => {
-        socket.emit('mpv-subscribe')
-        socket.emit('mpv-request')
-        setConnected(socket.connected)
-      })
+      if (isMounted()) {
+        process.nextTick(() => {
+          if (isMounted()) {
+            socket.emit('mpv-subscribe')
+            socket.emit('mpv-request')
+            setConnected(socket.connected)
+          }
+        })
+      }
     })
     socket.on('disconnect', () => {
-      setConnected(socket.connected)
+      if (isMounted()) {
+        setConnected(socket.connected)
+      }
     })
-  }, [])
+  }, [isMounted])
 
   return <SocketContext.Provider value={{ socket, connected }}>
     {props.children}

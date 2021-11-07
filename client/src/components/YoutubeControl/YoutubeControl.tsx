@@ -8,6 +8,7 @@ import { useCallback, useContext, useEffect, useState } from 'react'
 import youtubeSearch, { YouTubeSearchResults } from 'youtube-search'
 import useMpvCommands from '../../hooks/useMpvCommands'
 import { TasksContext } from '../TasksContextManager/TasksContextManager'
+import useIsMounted from '../../hooks/useIsMounted'
 
 export default function YoutubeControl () {
   const [showModal, flipOrSetShowModal] = useBooleanState(false)
@@ -15,9 +16,9 @@ export default function YoutubeControl () {
   const [searchResults, setSearchResults] = useState<YouTubeSearchResults[]>([])
   const { addTask } = useContext(TasksContext)
   const { selectURL } = useMpvCommands()
+  const isMounted = useIsMounted()
 
   useEffect(() => {
-    let isMounted = true
     const opts: youtubeSearch.YouTubeSearchOptions = {
       maxResults: 10,
       key: process.env.REACT_APP_YOUTUBE_API_KEY
@@ -26,7 +27,7 @@ export default function YoutubeControl () {
     if (search.length) {
       youtubeSearch(search, opts)
         .then(({ results }) => {
-          if (isMounted) {
+          if (isMounted()) {
             setSearchResults(results)
           }
         })
@@ -34,11 +35,7 @@ export default function YoutubeControl () {
     } else {
       setSearchResults([])
     }
-
-    return () => {
-      isMounted = false
-    }
-  }, [search])
+  }, [isMounted, search])
 
   const handleClickVideo = useCallback((url: string) => {
     return () => {

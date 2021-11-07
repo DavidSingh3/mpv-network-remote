@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { getDirectoryEntities } from '../util/getDirectoryEntities'
 import { TasksContext } from '../components/TasksContextManager/TasksContextManager'
+import useIsMounted from './useIsMounted'
 
 export default function useFileSystem (mimeTypeRegex?: RegExp): [
   {
@@ -22,13 +23,13 @@ export default function useFileSystem (mimeTypeRegex?: RegExp): [
   const [files, setFiles] = useState<Array<string>>([])
   const [directories, setDirectories] = useState<Array<string>>([])
   const { addTask } = useContext(TasksContext)
+  const isMounted = useIsMounted()
 
   useEffect(() => {
-    let isMounted = true
     const task = addTask(`Loading ${path} ...`)
     getDirectoryEntities(path, mimeTypeRegex)
       .then(({ files, directories }) => {
-        if (isMounted) {
+        if (isMounted()) {
           setSuccess(true)
           setError(null)
           setFiles(files ?? [])
@@ -36,18 +37,14 @@ export default function useFileSystem (mimeTypeRegex?: RegExp): [
         }
       })
       .catch((error) => {
-        if (isMounted) {
+        if (isMounted()) {
           setError(error.message)
         }
       })
       .finally(() => {
         task.finish()
       })
-
-    return () => {
-      isMounted = false
-    }
-  }, [addTask, mimeTypeRegex, path])
+  }, [addTask, isMounted, mimeTypeRegex, path])
 
   const setPathToParentDirectory = useCallback(() => {
     if (path !== '/') {
